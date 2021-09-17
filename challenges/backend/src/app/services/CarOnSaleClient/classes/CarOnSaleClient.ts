@@ -3,7 +3,6 @@ import { inject, injectable } from "inversify";
 import { DependencyIdentifier } from "../../../DependencyIdentifiers";
 import { ILogger } from "../../Logger/interface/ILogger";
 import { IAPIClient } from "../../APIClient/interface/IAPIClient";
-
 @injectable()
 export class CarOnSaleClient implements ICarOnSaleClient {
   public constructor(
@@ -11,7 +10,7 @@ export class CarOnSaleClient implements ICarOnSaleClient {
     @inject(DependencyIdentifier.API_CLIENT) private apiClient: IAPIClient
   ) {}
 
-  public async getRunningAuctions(): Promise<any> {
+  public async getRunningAuctions() {
     try {
       await this.apiClient.authenticateUser();
       return this.apiClient.retrieveRunningAuctions();

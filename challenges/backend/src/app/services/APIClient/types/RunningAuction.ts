@@ -1,7 +1,7 @@
 /**
  * For the fear of using <any>, some of the field are inferred "casually" from the variable name
  */
-export type IRunningAuctionResponse = {
+export type RunningAuctionResponse = {
   uuid: string;
   state: number;
   endingTime: Date;
@@ -9,7 +9,7 @@ export type IRunningAuctionResponse = {
   remainingTimeForInstantPurchaseInSeconds: number | null;
   instantPurchasePossibleUntil: number | Date | null;
   _fk_uuid_highestBiddingBuyerUser: string | null;
-  currentHighestBidValue: number | null;
+  currentHighestBidValue: number;
   currentHighestBidValueNet: number | null;
   minimumRequiredAsk: number;
   minimumRequiredAskNet: number;
