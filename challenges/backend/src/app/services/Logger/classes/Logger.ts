@@ -16,4 +16,9 @@ export class Logger implements ILogger {
     // tslint:disable-next-line: no-console
     console.error(`[ERROR]: ${message}`);
   }
+  // Can any type of variable
+  public info(obj: any): void {
+    // tslint:disable-next-line: no-console
+    console.error(obj);
+  }
 }
