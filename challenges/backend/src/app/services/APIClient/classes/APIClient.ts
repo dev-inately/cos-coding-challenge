@@ -8,42 +8,43 @@ import { ILogger } from "../../Logger/interface/ILogger";
 
 @injectable()
 export class APIClient implements IAPIClient {
-  protected readonly $http: AxiosInstance;
-  private userId: string = "buyer-challenge@caronsale.de";
-  private password: string = "Test123.";
+    protected readonly $http: AxiosInstance;
+    private userId: string = "buyer-challenge@caronsale.de";
+    private password: string = "Test123.";
 
-  public constructor(
-      @inject(DependencyIdentifier.BASE_URL) private baseUrl: string,
-      @inject(DependencyIdentifier.LOGGER) private logger: ILogger
-  ) {
-    this.$http = axios.create({
-      baseURL: this.baseUrl,
-      headers: { "Content-Type": "application/json", userId: this.userId },
-    });
-  }
-
-  // Allow user to change the password on the fly, when called
-  public async authenticateUser(userId: string, password: string) {
-    const credentials = {
-        userId: userId || this.userId,
-        password: password || this.password
+    public constructor(
+        @inject(DependencyIdentifier.BASE_URL) private baseUrl: string,
+        @inject(DependencyIdentifier.LOGGER) private logger: ILogger
+    ) {
+        this.$http = axios.create({
+            baseURL: this.baseUrl,
+            headers: { "Content-Type": "application/json", userId: this.userId },
+        });
     }
-    const url = `/v1/authentication/${credentials.userId}`;
-    const response: AxiosResponse<LoginResponse> = await this.$http.put(url,
-        { password: credentials.password });
-    this.userId = response.data.userId;
-    this.password = password;
-    this.$http.defaults.headers.authtoken = response.data.token;
-    this.$http.defaults.headers.userId = this.userId;
-    this.logger.log('User logged in successfully')
-  }
 
-  public async retrieveRunningAuctions() {
-    if (!this.$http.defaults.headers.authtoken) {
-      throw new Error("Please authenticate user first!");
+    // Allow user to change the password on the fly, when called
+    public async authenticateUser(userId: string, password: string) {
+        const credentials = {
+            userId: userId || this.userId,
+            password: password || this.password,
+        };
+        const url = `/v1/authentication/${credentials.userId}`;
+        const response: AxiosResponse<LoginResponse> = await this.$http.put(url, {
+            password: credentials.password,
+        });
+        this.userId = response.data.userId;
+        this.password = password;
+        this.$http.defaults.headers.authtoken = response.data.token;
+        this.$http.defaults.headers.userId = this.userId;
+        this.logger.log("User logged in successfully");
     }
-    const url = `/v1/auction/salesman/${this.userId}/_all/bidding-data`;
-    const response: AxiosResponse<RunningAuctionResponse[]> = await this.$http.get(url);
-    return response.data;
-  }
+
+    public async retrieveRunningAuctions() {
+        if (!this.$http.defaults.headers.authtoken) {
+            throw new Error("Please authenticate user first!");
+        }
+        const url = `/v1/auction/salesman/${this.userId}/_all/bidding-data`;
+        const response: AxiosResponse<RunningAuctionResponse[]> = await this.$http.get(url);
+        return response.data;
+    }
 }

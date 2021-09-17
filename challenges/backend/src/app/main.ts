@@ -12,7 +12,7 @@ import { APIClient } from "./services/APIClient/classes/APIClient";
  * Create the DI container.
  */
 const container = new Container({
-  defaultScope: "Singleton",
+    defaultScope: "Singleton",
 });
 
 /*
@@ -21,8 +21,9 @@ const container = new Container({
 container.bind<ILogger>(DependencyIdentifier.LOGGER).to(Logger);
 container.bind<IAPIClient>(DependencyIdentifier.API_CLIENT).to(APIClient);
 container.bind<ICarOnSaleClient>(DependencyIdentifier.CARONSALE_CLIENT).to(CarOnSaleClient);
-container.bind<string>(DependencyIdentifier.BASE_URL)
-  .toConstantValue("https://api-core-dev.caronsale.de/api");
+container
+    .bind<string>(DependencyIdentifier.BASE_URL)
+    .toConstantValue("https://api-core-dev.caronsale.de/api");
 
 /*
  * Inject all dependencies in the application & retrieve application instance.
@@ -33,5 +34,5 @@ const app = container.resolve(AuctionMonitorApp);
  * Start the application
  */
 (async () => {
-  await app.start();
+    await app.start();
 })();
