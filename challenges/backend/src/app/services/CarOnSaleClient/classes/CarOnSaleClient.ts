@@ -10,13 +10,17 @@ export class CarOnSaleClient implements ICarOnSaleClient {
     @inject(DependencyIdentifier.API_CLIENT) private apiClient: IAPIClient
   ) {}
 
-  public async getRunningAuctions() {
+  public async getRunningAuctions(userId?: string, password?: string) {
     try {
-      await this.apiClient.authenticateUser();
+      await this.apiClient.authenticateUser(userId, password);
       return this.apiClient.retrieveRunningAuctions();
     } catch (error: any) {
       // Log the error before throwing
-      this.logger.error(error.message);
+      let errorMessage = error.message;
+      if (error.isAxiosError) {
+        errorMessage = error?.response?.data?.message;
+      }
+      this.logger.error(errorMessage);
       throw error;
     }
   }

@@ -24,9 +24,7 @@ export class AuctionMonitorApp {
     };
     try {
       const response = await this.CarOnSaleClient.getRunningAuctions();
-      if (!response || !response.length) {
-        this.logger.info(result);
-      } else {
+      if (response && response.length) {
         result.auctions = response;
         result.totalRunningAuctions = response.length;
         result.averageBidNumber =
@@ -42,12 +40,17 @@ export class AuctionMonitorApp {
         );
         result.averageAuctionProgress =
           (totalHighestBidValue / totalAskValue) * 100;
-        this.logger.info(result);
-        this.logger.log("End of Program, Exiting now!");
-        process.exit(0);
+
       }
+      this.logger.info(result);
+      this.logger.log("End of Program, Exiting now!");
+      process.exit(0);
     } catch (error: any) {
-      this.logger.error(error.message);
+        let errorMessage = error.message
+        if (error.isAxiosError) {
+          errorMessage = error?.response?.data?.message;
+        }
+      this.logger.error(errorMessage);
       process.exit(-1);
     }
   }

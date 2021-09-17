@@ -4,10 +4,10 @@
 export type RunningAuctionResponse = {
   uuid: string;
   state: number;
-  endingTime: Date;
+  endingTime: string;
   remainingTimeInSeconds: number;
   remainingTimeForInstantPurchaseInSeconds: number | null;
-  instantPurchasePossibleUntil: number | Date | null;
+  instantPurchasePossibleUntil: number | string | null;
   _fk_uuid_highestBiddingBuyerUser: string | null;
   currentHighestBidValue: number;
   currentHighestBidValueNet: number | null;

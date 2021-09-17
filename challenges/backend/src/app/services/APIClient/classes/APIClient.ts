@@ -23,9 +23,14 @@ export class APIClient implements IAPIClient {
   }
 
   // Allow user to change the password on the fly, when called
-  public async authenticateUser(userId: string = this.userId, password: string = this.password) {
-    const url = `/v1/authentication/${userId}`;
-    const response: AxiosResponse<LoginResponse> = await this.$http.put(url, { password });
+  public async authenticateUser(userId: string, password: string) {
+    const credentials = {
+        userId: userId || this.userId,
+        password: password || this.password
+    }
+    const url = `/v1/authentication/${credentials.userId}`;
+    const response: AxiosResponse<LoginResponse> = await this.$http.put(url,
+        { password: credentials.password });
     this.userId = response.data.userId;
     this.password = password;
     this.$http.defaults.headers.authtoken = response.data.token;
